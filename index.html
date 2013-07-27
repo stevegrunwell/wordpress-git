@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Keeping WordPress Under [Version] Control with Git</title>
+<link href="reveal-js/css/reveal.min.css" rel="stylesheet" media="all" />
+<link href="reveal-js/css/theme/default.css" rel="stylesheet" media="all" />
+<link href="reveal-js/lib/css/zenburn.css" rel="stylesheet" media="all" />
+<link href="reveal-js/css/print/paper.css" rel="stylesheet" media="print" />
+<link href="theme/grunwell-theme.css" rel="stylesheet" media="all" />
+</head>
+<body>
+  <div class="reveal">
+    <!-- Any section element inside of this container is displayed as a slide -->
+    <div class="slides">
+
+      <section class="title">
+        <h1>Keeping WordPress Under [Version] Control with Git</h1>
+        <p>Steve Grunwell / <a href="https://twitter.com/stevegrunwell" rel="author">@stevegrunwell</a></p>
+        <p class="slide-link">Play along at home! <a href="http://stevegrunwell.github.io/wordpress-security-basics">stevegrunwell.github.io/wordpress-git</a></p>
+      </section>
+
+    </div><!-- .slides -->
+  </div><!-- .reveal -->
+
+<script src="reveal-js/lib/js/head.min.js"></script>
+<script src="reveal-js/js/reveal.js"></script>
+<script>
+  // Full list of configuration options available here:
+  // https://github.com/hakimel/reveal.js#configuration
+  Reveal.initialize({
+    controls: true,
+    progress: true,
+    history: true,
+    center: true,
+    transition: 'concave', // default/cube/page/concave/zoom/linear/fade/none
+    dependencies: [
+      { src: 'reveal-js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+    ]
+  });
+</script>
+</body>
+</html>
