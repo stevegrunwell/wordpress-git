@@ -21,6 +21,213 @@
         <p class="slide-link">Play along at home! <a href="http://stevegrunwell.github.io/wordpress-security-basics">stevegrunwell.github.io/wordpress-git</a></p>
       </section>
 
+      <section>
+        <section>
+          <h2>Warning:</h2>
+          <p>This is <em>not</em> an "Introduction to Git"-type of course. While previous Git/version control experience is not required it is recommended!</p>
+          <p class="fragment">Want to learn Git basics? Buy me a beer at the afterparty!</p>
+        </section>
+
+        <section>
+          <h2>Git resources</h2>
+          <ul>
+            <li><strong>Try Git</strong> by Github &amp; Code School<br><a href="http://try.github.io/" rel="external">try.github.io</a></li>
+            <li><strong>Git Immersion</strong> by Neo<br><a href="http://gitimmersion.com/" rel="external">gitimmersion.com</a></li>
+            <li><strong>Githug</strong> by Gary Rennie<br><a href="https://github.com/Gazler/githug" rel="external">github.com/Gazler/githug</a></li>
+          </ul>
+        </section>
+      </section>
+
+      <section>
+        <h2><abbr title="What The Flim-flam-shamma-lamma-ding-dong">WTF</abbr> is Git?</h2>
+        <ul>
+          <li>Distributed Version Control System (VCS)</li>
+          <li>Created by Linus Torvalds (see: Linux)</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Advantages of Version Control</h2>
+        <ul>
+          <li>Keep track of what changed, who made it, and when it happened</li>
+          <li>Easily roll back changes when necessary</li>
+          <li>Makes it easier to collaborate with other developers</li>
+        </ul>
+      </section>
+
+      <section class="title">
+        <h2>Using Git with WordPress</h2>
+      </section>
+
+      <section>
+        <h2>Goals of the Workflow</h2>
+        <ol>
+          <li>Make setup + deployments easier</li>
+          <li>Keep sensitive information <strong>out</strong> of the repo</li>
+          <li>Never have a <code>git status</code> return modified files on production</li>
+        </ol>
+      </section>
+
+      <section>
+        <h2>What's included?</h2>
+        <p>This strategy <em>includes</em> WordPress core and plugins in the repository.</p>
+        <p>Components could be adapted for another workflow that excludes these items.</p>
+      </section>
+
+      <section>
+        <h2>New environments in five steps</h2>
+        <ol>
+          <li>Clone repository</li>
+          <li>Import database</li>
+          <li>Fill out wp-config.php</li>
+          <li>Setup virtual host (if necessary)</li>
+          <li>Party</li>
+        </ol>
+      </section>
+
+      <section>
+        <h2>The .gitignore file</h2>
+        <pre><code class="git"># Exclude these files from the git repo
+wp-content/upgrade/*
+wp-content/uploads/*
+sitemap.*
+wp-config.php
+# ...wp-content/backup, wp-content/cache, etc.
+
+# Hidden system files
+*.DS_Store
+*[Tt]humbs.db
+*.Trashes
+
+# Include these files in previously blocked directories
+!wp-content/uploads/.htaccess</code></pre>
+      </section>
+
+      <section>
+        <h2>Why keep out so much?</h2>
+        <ul>
+          <li class="fragment">Config information will vary between environments</li>
+          <li class="fragment">Generated content (user- or otherwise) has no place in a <u>code</u> repository</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Reasons to keep uploads out of the repo</h2>
+        <ul>
+          <li class="fragment">Uploads in the repo mean as soon as anything's uploaded your repo is out of date</li>
+          <li class="fragment">Uploads + thumbnails = heavy repo w/ no benefit</li>
+          <li class="fragment">Again, version control is not a site backup!</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Behold: A Better Way</h2>
+        <pre><code class="apache"># in wp-content/uploads/.htaccess
+&lt;IfModule mod_rewrite.c&gt;
+  RewriteEngine on
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule (.*) http://mysite.com/wp-content/uploads/$1
+&lt;/IfModule&gt;</code></pre>
+      </section>
+
+      <section>
+        <h2>What does it do?</h2>
+        <div class="comparison-list">
+          <h3>Does the requested file exist in the local filesystem?</h3>
+          <ul>
+            <li><h4>Yes</h4> Load it as we normally would</li>
+            <li><h4>No</h4> Attempt to load the file from production</li>
+          </ul>
+        </div>
+      </section>
+
+      <section>
+        <h2>What does it mean?</h2>
+        <p>No more <abbr title="File Transfer Protocol">FTP</abbr>-ing files to your dev/staging environments!</p>
+        <img src="media/anchorman-yay.gif" alt="Ron Burgundy and his news team jumping for joy" />
+      </section>
+
+      <section>
+        <h2>Alternate version</h2>
+        <p>Code can also be put in main Htaccess file, better for deployment with tools like Capistrano:</p>
+        <pre><code class="apache">&lt;IfModule mod_rewrite.c&gt;
+  RewriteEngine on
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule wp-content/uploads/(.*) http://{PRODUCTION_URL}/wp-content/uploads/$1 [NC,L]
+&lt;/IfModule&gt;</code></pre>
+      </section>
+
+      <section>
+        <h2>Dealing with wp-config.php</h2>
+        <ul>
+          <li class="fragment">The information in wp-config.php is very environment-specific
+            <ul>
+              <li class="fragment">If it's <em>not</em> you're doing it wrong!
+                <ul>
+                  <li>Passwords</li>
+                  <li>Keys + salts</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li class="fragment">Passwords should never be committed to the repository</li>
+        </ul>
+      </section>
+
+      <section>
+        <section>
+          <h2>Create a fresh wp-config.php file</h2>
+          <pre><code class="bash">$ git clone {REPO} {DIRECTORY}
+$ cd {DIRECTORY}
+$ cp wp-config-sample.php wp-config.php
+$ vi wp-config.php</code></pre>
+        </section>
+
+        <section>
+          <h3>WP_SITEURL and WP_HOME</h3>
+          <p>Defining these values in wp-config.php eliminate the need to edit these values in the <code>wp_options</code> database table</p>
+          <pre><code class="php">// NO trailing slash!
+define( 'WP_SITEURL', 'http://example.com' );
+define( 'WP_HOME', WP_SITEURL );</code></pre>
+        </section>
+
+        <section>
+          <h3>Other items</h3>
+          <ul>
+            <li>Database credentials</li>
+            <li>Keys + salts</li>
+            <li>Debug mode (where applicable)</li>
+          </ul>
+        </section>
+      </section>
+
+      <section>
+        <section>
+          <h2>Put it all together</h2>
+          <ol>
+            <li class="fragment">Clone repository</li>
+            <li class="fragment">Import database</li>
+            <li class="fragment">Fill out wp-config.php</li>
+            <li class="fragment">Setup virtual host (if necessary)</li>
+            <li class="fragment">Party</li>
+          </ol>
+        </section>
+
+        <section class="title">
+          <h3>Deploy new updates</h3>
+          <pre><code class="bash">$ git pull</code></pre>
+          <p class="fragment">&hellip;and that's it.</p>
+        </section>
+      </section>
+
+      <section class="title">
+        <h2>Questions?</h2>
+        <p>Steve Grunwell<br>Developer, Buckeye Interactive<br><a href="http://stevegrunwell.com/" rel="external">stevegrunwell.com</a><br><a href="https://twitter.com/stevegrunwell" rel="external">@SteveGrunwell</a></p>
+        <p>Slides:<br><a href="http://stevegrunwell.github.io/wordpress-security-basics">stevegrunwell.github.io/wordpress-git</a></p>
+      </section>
+
     </div><!-- .slides -->
   </div><!-- .reveal -->
 
