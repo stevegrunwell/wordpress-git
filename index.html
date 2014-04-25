@@ -17,7 +17,7 @@
 
       <section class="title">
         <h1>Keeping WordPress Under [Version] Control with Git</h1>
-        <p>Paul Tela / <a href="https://twitter.com/paultela" rel="author">@paultela</a></p>
+        <p>Steve Grunwell / <a href="https://twitter.com/stevegrunwell" rel="author">@stevegrunwell</a></p>
         <p class="slide-link">Play along at home! <a href="http://stevegrunwell.github.io/wordpress-security-basics">stevegrunwell.github.io/wordpress-git</a></p>
       </section>
 
@@ -87,20 +87,22 @@
 
       <section>
         <h2>The .gitignore file</h2>
-        <pre><code class="git"># Exclude these files from the git repo
-wp-content/upgrade/*
-wp-content/uploads/*
-sitemap.*
-wp-config.php
-# ...wp-content/backup, wp-content/cache, etc.
+        <pre><code class="git"># Keep these files out of the repo
+/wp-content/plugins/hello.php
+/wp-content/themes/twenty*
+/wp-content/upgrade
+/wp-content/uploads
+/sitemap.*
+/wp-config.php
 
-# Hidden system files
+# Hidden files
 *.DS_Store
-*[Tt]humbs.db
-*.Trashes
+*Thumbs.db
+*.sass-cache*
+*~imageoptim*
 
-# Include these files in previously blocked directories
-!wp-content/uploads/.htaccess</code></pre>
+# Capistrano
+REVISION</code></pre>
       </section>
 
       <section>
@@ -123,12 +125,13 @@ wp-config.php
 
       <section>
         <h2>Behold: A Better Way</h2>
-        <pre><code class="apache"># in wp-content/uploads/.htaccess
-&lt;IfModule mod_rewrite.c&gt;
+        <pre><code class="apache">&lt;IfModule mod_rewrite.c&gt;
   RewriteEngine on
+
+  # Attempt to load files from production if they're not in our local version
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteRule (.*) http://mysite.com/wp-content/uploads/$1
+  RewriteRule wp-content/uploads/(.*) http://{PRODUCTION_URL}/wp-content/uploads/$1 [NC,L]
 &lt;/IfModule&gt;</code></pre>
       </section>
 
@@ -147,17 +150,6 @@ wp-config.php
         <h2>What does it mean?</h2>
         <p>No more <abbr title="File Transfer Protocol">FTP</abbr>-ing files to your dev/staging environments!</p>
         <img src="media/anchorman-yay.gif" alt="Ron Burgundy and his news team jumping for joy" />
-      </section>
-
-      <section>
-        <h2>Alternate version</h2>
-        <p>Code can also be put in main Htaccess file, better for deployment with tools like Capistrano:</p>
-        <pre><code class="apache">&lt;IfModule mod_rewrite.c&gt;
-  RewriteEngine on
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteRule wp-content/uploads/(.*) http://{PRODUCTION_URL}/wp-content/uploads/$1 [NC,L]
-&lt;/IfModule&gt;</code></pre>
       </section>
 
       <section>
@@ -229,7 +221,6 @@ define( 'WP_HOME', WP_SITEURL );</code></pre>
 
       <section class="title">
         <h2>Questions?</h2>
-        <p>Paul Tela<br>Developer, Buckeye Interactive<br><a href="http://paultela.com/" rel="external">paultela.com</a><br><a href="https://twitter.com/paultela" rel="external">@paultela</a></p>
         <p>Steve Grunwell<br>Developer, Buckeye Interactive<br><a href="http://stevegrunwell.com/" rel="external">stevegrunwell.com</a><br><a href="https://twitter.com/" rel="external" />@stevegrunwell</a></p>
         <p>Slides:<br><a href="http://stevegrunwell.github.io/wordpress-security-basics">stevegrunwell.github.io/wordpress-git</a></p>
       </section>
