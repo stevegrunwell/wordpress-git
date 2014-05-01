@@ -34,6 +34,7 @@
             <li><strong>Try Git</strong> by Github &amp; Code School<br><a href="http://try.github.io/" rel="external">try.github.io</a></li>
             <li><strong>Git Immersion</strong> by Neo<br><a href="http://gitimmersion.com/" rel="external">gitimmersion.com</a></li>
             <li><strong>Githug</strong> by Gary Rennie<br><a href="https://github.com/Gazler/githug" rel="external">github.com/Gazler/githug</a></li>
+            <li><strong>Git Cheatsheet</strong> by Magnus-G<br><a href="https://github.com/Magnus-G/GIT-Cheat-Sheet" rel="external">github.com/Magnus-G/GIT-Cheat-Sheet</a></li>
           </ul>
         </section>
       </section>
@@ -47,13 +48,27 @@
       </section>
 
       <section>
-        <h2>Advantages of Version Control</h2>
-        <ul>
-          <li>Keep track of what changed, who made it, and when it happened</li>
-          <li>Easily roll back changes when necessary</li>
-          <li>Makes it easier to collaborate with other developers</li>
-        </ul>
+        <section>
+          <h2>Advantages of Version Control</h2>
+          <ul>
+            <li class="fragment">Keep track of what changed, who made it, and when it happened</li>
+            <li class="fragment">Easily roll back changes when necessary</li>
+            <li class="fragment">With some systems (including Git), branching is cheap and easy, which makes it easier to develop features in parallel</li>
+            <li class="fragment">Makes it easier to collaborate with other developers</li>
+          </ul>
+        </section>
+
+        <section>
+          <img src="media/heisencat.png" alt="The Github OctoCat mascot dressed as Walter White (a.k.a. Heisenberg) from Breaking Bad" />
+          <p style="text-align: center; font-style: italic;">Jesse, it's time to code!</p>
+        </section>
       </section>
+
+      <section>
+          <h2>What version control is <em>not</em></h2>
+          <p>Version control is not meant to be a replacement for real, scheduled backups.</p>
+          <p>Since every little change is tracked, it's not a great place to do debugging. Avoid committing untested or broken code to the repository!</p>
+        </section>
 
       <section class="title">
         <h2>Using Git with WordPress</h2>
@@ -63,9 +78,10 @@
         <h2>Goals of the Workflow</h2>
         <ol>
           <li>Make setup + deployments easier</li>
-          <li>Keep sensitive information <strong>out</strong> of the repo</li>
+          <li>Keep sensitive information out of the repository</li>
           <li>Never have a <code>git status</code> return modified files on production</li>
         </ol>
+        <p class="fragment"><strong>Bonus:</strong> Go home on time, free of headaches.</p>
       </section>
 
       <section>
@@ -94,6 +110,7 @@
 /wp-content/uploads
 /sitemap.*
 /wp-config.php
+*.sql
 
 # Hidden files
 *.DS_Store
@@ -131,7 +148,7 @@ REVISION</code></pre>
   # Attempt to load files from production if they're not in our local version
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteRule wp-content/uploads/(.*) http://{PRODUCTION_URL}/wp-content/uploads/$1 [NC,L]
+  RewriteRule wp-content/uploads/(.*) http://{PROD}/wp-content/uploads/$1 [NC,L]
 &lt;/IfModule&gt;</code></pre>
       </section>
 
@@ -154,19 +171,6 @@ REVISION</code></pre>
 
       <section>
         <h2>Dealing with wp-config.php</h2>
-        <ul>
-          <li class="fragment">The information in wp-config.php is very environment-specific
-            <ul>
-              <li class="fragment">If it's <em>not</em> you're doing it wrong!
-                <ul>
-                  <li>Passwords</li>
-                  <li>Keys + salts</li>
-                </ul>
-              </li>
-            </ul>
-          </li>
-          <li class="fragment">Passwords should never be committed to the repository</li>
-        </ul>
       </section>
 
       <section>
@@ -182,12 +186,28 @@ $ vi wp-config.php</code></pre>
           <h3>WP_SITEURL and WP_HOME</h3>
           <p>Defining these values in wp-config.php eliminate the need to edit these values in the <code>wp_options</code> database table</p>
           <pre><code class="php">// NO trailing slash!
-define( 'WP_SITEURL', 'http://example.com' );
-define( 'WP_HOME', WP_SITEURL );</code></pre>
+define('WP_SITEURL', 'http://example.com');
+define('WP_HOME', WP_SITEURL);</code></pre>
         </section>
 
         <section>
-          <h3>Other items</h3>
+          <h3>DISALLOW_FILE_MODS or DISALLOW_FILE_EDIT</h3>
+          <p>Prevent non-developers from installing/updating plugins or themes.</p>
+          <pre><code class="php">// Disable the theme and plugin installers and editors...
+define('DISALLOW_FILE_MODS', true);
+
+// ...or just disable the theme/plugin editor
+define('DISALLOW_FILE_EDIT', true);</code></pre>
+        </section>
+
+        <section>
+          <h3>WordPress automatic updates</h3>
+          <p>WordPress automatic updates won't run when evidence of version control is found, which is pretty baller.</p>
+          <img src="media/kirk-mccoy-nod.gif" alt="Captain Kirk and Dr. McCoy nodding in approval" />
+        </section>
+
+        <section>
+          <h3>Other important items in wp-config.php</h3>
           <ul>
             <li>Database credentials</li>
             <li>Keys + salts</li>
@@ -216,6 +236,7 @@ define( 'WP_HOME', WP_SITEURL );</code></pre>
           <h3>Deploying new updates</h3>
           <pre><code class="bash">$ git pull</code></pre>
           <p class="fragment">&hellip;and that's it.</p>
+          <p class="fragment">(unless you use better deployment tools)</p>
         </section>
       </section>
 
