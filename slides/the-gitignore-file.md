@@ -14,7 +14,4 @@
 *Thumbs.db
 *.sass-cache*
 *~imageoptim*
-
-# Capistrano
-REVISION
 ```
