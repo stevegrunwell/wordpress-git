@@ -1,0 +1,23 @@
+{
+  "name": "grunwell-reveal-theme",
+  "version": "0.1.0",
+  "homepage": "https://github.com/stevegrunwell/grunwell-reveal-theme",
+  "authors": [
+    "Steve Grunwell <steve@stevegrunwell.com>"
+  ],
+  "description": "Steve Grunwell's theme overrides for Reveal.js presentations",
+  "keywords": [
+    "Reveal.js",
+    "Presentations",
+    "Grunwell"
+  ],
+  "license": "WTF",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

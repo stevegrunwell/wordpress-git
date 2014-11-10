@@ -1,0 +1,22 @@
+<section>
+  <h3>Has anything changed on the target server?</h3>
+
+  <p>Add to deployment script to ensure nothing has changed on server:</p>
+  <pre><code class="bash">$ git ls-files -dmo --exclude-standard</code></pre>
+  <p>Will be empty if there are unchanged files, easier than parsing <code>git status</code></p>
+</section>
+
+<section>
+  <h4>Example: Capistrano Task</h4>
+
+  <pre><code class="ruby"># Bail if there are modified files on the target server
+task :untracked_files do
+  is_dirty = capture "cd #{current_path} && git ls-files -dmo --exclude-standard"
+  abort "There are modified files on #{app_environment}, please commit or reset \
+  these before deploying!" unless is_dirty.empty?
+end
+
+before "deploy", "deploy:untracked_files"</code></pre>
+
+  <p>Be sure to add <code>REVISION</code> to your .gitignore file!</p>
+</section>

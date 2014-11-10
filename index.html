@@ -1,269 +1,258 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Keeping WordPress Under [Version] Control with Git</title>
-<link href="reveal-js/css/reveal.min.css" rel="stylesheet" media="all" />
-<link href="reveal-js/css/theme/default.css" rel="stylesheet" media="all" />
-<link href="reveal-js/lib/css/zenburn.css" rel="stylesheet" media="all" />
-<link href="reveal-js/css/print/paper.css" rel="stylesheet" media="print" />
-<link href="theme/grunwell-theme.css" rel="stylesheet" media="all" />
-</head>
-<body>
-  <div class="reveal">
-    <!-- Any section element inside of this container is displayed as a slide -->
-    <div class="slides">
 
-      <section class="title">
-        <h1>Keeping WordPress Under [Version] Control with Git</h1>
-        <p>Steve Grunwell / <a href="https://twitter.com/stevegrunwell" rel="author">@stevegrunwell</a></p>
-        <p class="slide-link">Play along at home! <a href="http://stevegrunwell.github.io/wordpress-git">stevegrunwell.github.io/wordpress-git</a></p>
-      </section>
+    <head>
+        <meta charset="utf-8">
 
-      <section>
-        <section>
-          <h2>Warning:</h2>
-          <p>This is <em>not</em> an "Introduction to Git"-type of course. While previous Git/version control experience is not required it is recommended!</p>
-          <p class="fragment">Want to learn Git basics? Buy me a beer at the afterparty!</p>
-        </section>
+        <title>Keeping WordPress Under [Version] Control with Git</title>
 
-        <section>
-          <h2>Git resources</h2>
-          <ul>
-            <li><strong>Try Git</strong> by Github &amp; Code School<br><a href="http://try.github.io/" rel="external">try.github.io</a></li>
-            <li><strong>Git Immersion</strong> by Neo<br><a href="http://gitimmersion.com/" rel="external">gitimmersion.com</a></li>
-            <li><strong>Githug</strong> by Gary Rennie<br><a href="https://github.com/Gazler/githug" rel="external">github.com/Gazler/githug</a></li>
-            <li><strong>Git Cheatsheet</strong> by Magnus-G<br><a href="https://github.com/Magnus-G/GIT-Cheat-Sheet" rel="external">github.com/Magnus-G/GIT-Cheat-Sheet</a></li>
-          </ul>
-        </section>
-      </section>
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-      <section>
-        <h2><abbr title="What The Flim-flam-shamma-lamma-ding-dong">WTF</abbr> is Git?</h2>
-        <ul>
-          <li>Distributed Version Control System (VCS)</li>
-          <li>Created by Linus Torvalds (see: Linux)</li>
-        </ul>
-      </section>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-      <section>
-        <section>
-          <h2>Advantages of Version Control</h2>
-          <ul>
-            <li class="fragment">Keep track of what changed, who made it, and when it happened</li>
-            <li class="fragment">Easily roll back changes when necessary</li>
-            <li class="fragment">With some systems (including Git), branching is cheap and easy, which makes it easier to develop features in parallel</li>
-            <li class="fragment">Makes it easier to collaborate with other developers</li>
-          </ul>
-        </section>
+        <link rel="stylesheet" href="bower_components/reveal.js/css/reveal.min.css">
+    
+        <link rel="stylesheet" href="css/theme.css" id="theme">
+    
 
-        <section>
-          <img src="media/heisencat.png" alt="The Github OctoCat mascot dressed as Walter White (a.k.a. Heisenberg) from Breaking Bad" />
-          <p style="text-align: center; font-style: italic;">Jesse, it's time to code!</p>
-        </section>
-      </section>
+        <!-- For syntax highlighting -->
+        <link rel="stylesheet" href="bower_components/reveal.js/lib/css/zenburn.css" id="highlight-theme">
 
-      <section>
-          <h2>What version control is <em>not</em></h2>
-          <p>Version control is not meant to be a replacement for real, scheduled backups.</p>
-          <p>Since every little change is tracked, it's not a great place to do debugging. Avoid committing untested or broken code to the repository!</p>
-        </section>
+        <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+        <script>
+          if( window.location.search.match( /print-pdf/gi ) ) {
+            var link = document.createElement( 'link' );
+                link.rel = 'stylesheet';
+                link.type = 'text/css';
+                link.href = 'bower_components/reveal.js/css/print/pdf.css';
+                document.getElementsByTagName( 'head' )[0].appendChild( link );
+            }
+        </script>
 
-      <section class="title">
-        <h2>Using Git with WordPress</h2>
-      </section>
+        <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+    </head>
 
-      <section>
-        <h2>Goals of the Workflow</h2>
-        <ol>
-          <li>Make setup + deployments easier</li>
-          <li>Keep sensitive information out of the repository</li>
-          <li>Never have a <code>git status</code> return modified files on production</li>
-        </ol>
-        <p class="fragment"><strong>Bonus:</strong> Go home on time, free of headaches.</p>
-      </section>
+    <body>
 
-      <section>
-        <h2>What's included?</h2>
-        <p>This strategy <em>includes</em> WordPress core and plugins in the repository.</p>
-        <p>Components could be adapted for another workflow that excludes these items.</p>
-      </section>
+        <div class="reveal">
 
-      <section>
-        <h2>New environments in five steps</h2>
-        <ol>
-          <li>Clone repository</li>
-          <li>Import database</li>
-          <li>Fill out wp-config.php</li>
-          <li>Setup virtual host (if necessary)</li>
-          <li>Party</li>
-        </ol>
-      </section>
+            <div class="slides">
 
-      <section>
-        <h2>The .gitignore file</h2>
-        <pre><code class="git"># Keep these files out of the repo
-/wp-content/plugins/hello.php
-/wp-content/themes/twenty*
-/wp-content/upgrade
-/wp-content/uploads
-/sitemap.*
-/wp-config.php
-*.sql
+                
+                    
+                        
+    <section data-markdown="slides/index.md"></section>
 
-# Hidden files
-*.DS_Store
-*Thumbs.db
-*.sass-cache*
-*~imageoptim*
 
-# Capistrano
-REVISION</code></pre>
-      </section>
+                    
+                    
+                
+                    
+                        
+    <section data-markdown="slides/who-am-i.md"></section>
 
-      <section>
-        <h2>Why keep out so much?</h2>
-        <ul>
-          <li class="fragment">Config information will vary between environments</li>
-          <li class="fragment">Generated content (user- or otherwise) has no place in a <u>code</u> repository</li>
-          <li class="fragment">Remember: <strong>Version control !== backup</strong></li>
-        </ul>
-      </section>
 
-      <section>
-        <h2>Reasons to keep uploads out of the repo</h2>
-        <ul>
-          <li class="fragment">Uploads in the repo mean as soon as anything's uploaded your repo is out of date</li>
-          <li class="fragment">Uploads + thumbnails = heavy repo w/ no benefit</li>
-          <li class="fragment">Again, version control is not a site backup!</li>
-        </ul>
-      </section>
+                    
+                    
+                
+                    
+                        
+    <section data-html="slides/git-resources.html"></section>
 
-      <section>
-        <h2>Behold: A Better Way</h2>
-        <pre><code class="apache">&lt;IfModule mod_rewrite.c&gt;
-  RewriteEngine on
 
-  # Attempt to load files from production if they're not in our local version
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteRule wp-content/uploads/(.*) http://{PROD}/wp-content/uploads/$1 [NC,L]
-&lt;/IfModule&gt;</code></pre>
-      </section>
+                    
+                    
+                
+                    
+                        
+    <section data-markdown="slides/wtf-is-git.md"></section>
 
-      <section>
-        <h2>What does it do?</h2>
-        <div class="comparison-list">
-          <h3>Does the requested file exist in the local filesystem?</h3>
-          <ul>
-            <li><h4>Yes</h4> Load it as we normally would</li>
-            <li><h4>No</h4> Attempt to load the file from production</li>
-          </ul>
+
+                    
+                    
+                
+                    
+                        
+    <section data-html="slides/advantages-of-version-control.html"></section>
+
+
+                    
+                    
+                
+                    
+                        
+    <section data-markdown="slides/what-version-control-is-not.md"></section>
+
+
+                    
+                    
+                
+                    
+                        
+    <section data-markdown="slides/using-git-with-wordpress.md"></section>
+
+
+                    
+                    
+                
+                    
+                        
+    <section data-html="slides/goals-of-the-workflow.html"></section>
+
+
+                    
+                    
+                
+                    
+                        
+    <section data-markdown="slides/whats-included.md"></section>
+
+
+                    
+                    
+                
+                    
+                        
+    <section data-markdown="slides/new-environments-in-four-steps.md"></section>
+
+
+                    
+                    
+                
+                    
+                        
+    <section data-markdown="slides/the-gitignore-file.md"></section>
+
+
+                    
+                    
+                
+                    
+                        
+    <section data-html="slides/why-keep-out-so-much.html"></section>
+
+
+                    
+                    
+                
+                    
+                        
+    <section data-html="slides/reasons-to-keep-uploads-out-of-the-repo.html"></section>
+
+
+                    
+                    
+                
+                    
+                        
+    <section data-markdown="slides/behold-a-better-way.md"></section>
+
+
+                    
+                    
+                
+                    
+                        
+    <section data-html="slides/what-does-it-do.html"></section>
+
+
+                    
+                    
+                
+                    
+                        
+    <section data-markdown="slides/what-does-it-mean.md"></section>
+
+
+                    
+                    
+                
+                    
+                        
+    <section data-markdown="slides/dealing-with-wp-configphp.md"></section>
+
+
+                    
+                    
+                
+                    
+                        
+    <section data-html="slides/wp-configphp.html"></section>
+
+
+                    
+                    
+                
+                    
+                        
+    <section data-html="slides/put-it-all-together.html"></section>
+
+
+                    
+                    
+                
+                    
+                        
+    <section data-markdown="slides/additional-tips.md"></section>
+
+
+                    
+                    
+                
+                    
+                        
+    <section data-html="slides/has-anything-changed-on-the-target-server.html"></section>
+
+
+                    
+                    
+                
+                    
+                        
+    <section data-markdown="slides/questions.md"></section>
+
+
+                    
+                    
+                
+            </div>
+
         </div>
-      </section>
 
-      <section>
-        <h2>What does it mean?</h2>
-        <p>No more <abbr title="File Transfer Protocol">FTP</abbr>-ing files to your dev/staging environments!</p>
-        <img src="media/anchorman-yay.gif" alt="Ron Burgundy and his news team jumping for joy" />
-      </section>
+        <script src="bower_components/reveal.js/lib/js/head.min.js"></script>
+        <script src="bower_components/reveal.js/js/reveal.min.js"></script>
+        <script>
+            // Configure Reveal
+            // Full list of configuration options available here:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
 
-      <section>
-        <h2>Dealing with wp-config.php</h2>
-      </section>
+                theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+                transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
 
-      <section>
-        <section>
-          <h2>Create a fresh wp-config.php file</h2>
-          <pre><code class="bash">$ git clone {REPO} {DIRECTORY}
-$ cd {DIRECTORY}
-$ cp wp-config-sample.php wp-config.php
-$ vi wp-config.php</code></pre>
-        </section>
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    { src: 'bower_components/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'bower_components/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'bower_components/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'bower_components/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'bower_components/reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                    { src: 'bower_components/reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+                    // { src: 'bower_components/reveal.js/plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+                    //{ src: 'bower_components/reveal.js/plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
 
-        <section>
-          <h3>WP_SITEURL and WP_HOME</h3>
-          <p>Defining these values in wp-config.php eliminate the need to edit these values in the <code>wp_options</code> database table</p>
-          <pre><code class="php">// NO trailing slash!
-define('WP_SITEURL', 'http://example.com');
-define('WP_HOME', WP_SITEURL);</code></pre>
-        </section>
+                    { src: 'js/loadhtmlslides.js', condition: function() { return !!document.querySelector( '[data-html]' ); } }
+                ]
+            });
+        </script>
 
-        <section>
-          <h3>DISALLOW_FILE_MODS or DISALLOW_FILE_EDIT</h3>
-          <p>Prevent non-developers from installing/updating plugins or themes.</p>
-          <pre><code class="php">// Disable the theme and plugin installers and editors...
-define('DISALLOW_FILE_MODS', true);
+    </body>
 
-// ...or just disable the theme/plugin editor
-define('DISALLOW_FILE_EDIT', true);</code></pre>
-        </section>
-
-        <section>
-          <h3>WordPress automatic updates</h3>
-          <p>WordPress automatic updates won't run when evidence of version control is found, which is pretty baller.</p>
-          <img src="media/kirk-mccoy-nod.gif" alt="Captain Kirk and Dr. McCoy nodding in approval" />
-        </section>
-
-        <section>
-          <h3>Other important items in wp-config.php</h3>
-          <ul>
-            <li>Database credentials</li>
-            <li>Keys + salts</li>
-            <li>Debug mode (where applicable)</li>
-          </ul>
-        </section>
-      </section>
-
-      <section>
-        <section>
-          <h2>Put it all together</h2>
-          <ol>
-            <li class="fragment">Clone repository</li>
-            <li class="fragment">Import database</li>
-            <li class="fragment">Fill out wp-config.php</li>
-            <li class="fragment">Setup virtual host (if necessary)</li>
-          </ol>
-        </section>
-
-        <section>
-          <h2>Step 5: Party!</h2>
-          <img src="media/dj-party.gif" alt="A DJ rocking a party" />
-        </section>
-
-        <section class="title">
-          <h3>Deploying new updates</h3>
-          <pre><code class="bash">$ git pull</code></pre>
-          <p class="fragment">&hellip;and that's it.</p>
-          <p class="fragment">(unless you use better deployment tools)</p>
-        </section>
-      </section>
-
-      <section class="title">
-        <h2>Questions?</h2>
-        <p>Steve Grunwell<br>Developer, Buckeye Interactive<br><a href="http://stevegrunwell.com/" rel="external">stevegrunwell.com</a><br><a href="https://twitter.com/" rel="external" />@stevegrunwell</a></p>
-        <p>Slides:<br><a href="http://stevegrunwell.github.io/wordpress-git">stevegrunwell.github.io/wordpress-git</a></p>
-      </section>
-
-    </div><!-- .slides -->
-  </div><!-- .reveal -->
-
-<script src="reveal-js/lib/js/head.min.js"></script>
-<script src="reveal-js/js/reveal.js"></script>
-<script>
-  // Full list of configuration options available here:
-  // https://github.com/hakimel/reveal.js#configuration
-  Reveal.initialize({
-    controls: true,
-    progress: true,
-    history: true,
-    center: true,
-    transition: 'concave', // default/cube/page/concave/zoom/linear/fade/none
-    dependencies: [
-      { src: 'reveal-js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
-    ]
-  });
-</script>
-</body>
 </html>

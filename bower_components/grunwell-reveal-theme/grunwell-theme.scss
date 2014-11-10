@@ -1,0 +1,178 @@
+/**
+ * Overrides and custom styles
+ *
+ * @package Reveal.js
+ * @subpackage Grunwell Theme
+ * @author Steve Grunwell
+ */
+
+// Primary/body text
+$mainFont: 'Open Sans', sans-serif;
+$mainFontSize: 36px;
+$mainColor: #d1d1d1;
+
+// Headings
+$headingFont: 'Montserrat', Impact, sans-serif;
+$headingColor: #fff;
+$headingLineHeight: 1em;
+$headingTextTransform: none;
+$headingTextShadow: none;
+$heading1TextShadow: none;
+
+// Links and actions
+$linkColor: #13DAEC;
+$linkColorHover: $linkColor;
+
+// Text selection
+$selectionBackgroundColor: $linkColor;
+$selectionColor: #fff;
+
+// Generates the presentation background, can be overridden
+// to return a background image or gradient
+@mixin bodyBackground() {
+  background: $backgroundColor;
+}
+
+/** Style additions/overrides */
+.reveal {
+  * {
+    box-sizing: border-box;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    margin-bottom: .5em;
+    line-height: 1.1em;
+  }
+  h1 {
+    font-size: 2.8em;
+  }
+  h2, h3 {
+    font-size: 2.11em;
+  }
+  h4 {
+    font-size: 1.9em;
+  }
+
+  blockquote {
+    padding: .5em;
+    p.cite {
+      display: block;
+      text-align: right;
+      font-size: .8em;
+      &:before {
+        content: '\2013\00a0';
+      }
+    }
+  }
+
+  pre {
+    width: auto;
+    margin-bottom: 1.5em;
+    code {
+      padding: 5px 1em;
+    }
+  }
+
+  section {
+    img {
+      display: block;
+      margin: 0 auto 1.5em;
+    }
+  }
+}
+
+.slides {
+  ul, ol, p {
+    display: block;
+    margin-bottom: 1em;
+    text-align: left;
+    line-height: 1.5em;
+    &.center {
+      text-align: center;
+    }
+  }
+  ul, ol {
+    ul, ol {
+      margin-top: .25em;
+      margin-bottom: 0;
+    }
+    li {
+      margin-bottom: .5em;
+    }
+  }
+  strong {
+    color: $linkColor;
+  }
+}
+
+.normal-text {
+  text-transform: none;
+}
+
+.slide-link {
+  position: relative;
+  bottom: -1em;
+  font-size: .8em;
+  a {
+    display: block;
+  }
+}
+
+.figure {
+  .reveal & {
+    padding-bottom: 2em;
+    img {
+      max-width: 100%;
+      margin: 0 auto 1em;
+      max-height: 600px;
+    }
+  }
+  .caption {
+    display: block;
+    font-size: .5em;
+    text-align: right;
+  }
+}
+
+.comparison-list {
+  &, p, li {
+    text-align: center;
+  }
+  h3 {
+    margin-bottom: 1.7em;
+    font-size: 1.1em;
+    text-transform: none;
+    font-weight: 300;
+    font-style: italic;
+  }
+  ul {
+    margin: 0;
+    list-style: none;
+  }
+  li {
+    float: left;
+    width: 50%;
+    padding: 0 6%;
+    + li {
+      border-left: 1px solid;
+    }
+  }
+  .reveal & {
+    margin-top: 2em;
+  }
+}
+
+::selection {
+  color: $selectionColor;
+  background-color: $selectionBackgroundColor;
+}
+
+::-moz-selection {
+  color: $selectionColor;
+  background-color: $selectionBackgroundColor;
+}
+
+/* Utility classes */
+.screen-reader-text {
+  position: absolute;
+  left: -99999em;
+}
