@@ -1,0 +1,40 @@
+<section>
+  <h2>Create a fresh wp-config.php file</h2>
+  <pre><code class="bash">$ git clone {REPO} {DIRECTORY}
+$ cd {DIRECTORY}
+$ cp wp-config-sample.php wp-config.php
+$ vi wp-config.php</code></pre>
+</section>
+
+<section>
+  <h3>WP_SITEURL and WP_HOME</h3>
+  <p>Defining these values in wp-config.php eliminate the need to edit these values in the <code>wp_options</code> database table</p>
+  <pre><code class="php">// NO trailing slash!
+define('WP_SITEURL', 'http://example.com');
+define('WP_HOME', WP_SITEURL);</code></pre>
+</section>
+
+<section>
+  <h3>DISALLOW_FILE_MODS or DISALLOW_FILE_EDIT</h3>
+  <p>Prevent non-developers from installing/updating plugins or themes.</p>
+  <pre><code class="php">// Disable the theme and plugin installers and editors...
+define('DISALLOW_FILE_MODS', true);
+
+// ...or just disable the theme/plugin editor
+define('DISALLOW_FILE_EDIT', true);</code></pre>
+</section>
+
+<section>
+  <h3>WordPress automatic updates</h3>
+  <p>WordPress automatic updates won't run when evidence of version control is found, which is pretty baller.</p>
+  <img src="assets/kirk-mccoy-nod.gif" alt="Captain Kirk and Dr. McCoy nodding in approval" />
+</section>
+
+<section>
+  <h3>Other important items in wp-config.php</h3>
+  <ul>
+    <li>Database credentials</li>
+    <li>Keys + salts</li>
+    <li>Debug mode (where applicable)</li>
+  </ul>
+</section>

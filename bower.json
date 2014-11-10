@@ -1,0 +1,8 @@
+{
+  "name": "keeping-wordpress-under-version-control-with-git",
+  "version": "2.0.0",
+  "dependencies": {
+    "reveal.js": "~2.6.1",
+    "grunwell-reveal-theme": "https://github.com/stevegrunwell/grunwell-reveal-theme.git"
+  }
+}

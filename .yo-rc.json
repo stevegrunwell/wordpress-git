@@ -1,0 +1,10 @@
+{
+  "generator-reveal": {
+    "presentationTitle": "Keeping WordPress Under [Version] Control with Git",
+    "packageVersion": "2.0.0",
+    "useSass": true,
+    "deployToGithubPages": true,
+    "githubUsername": "stevegrunwell",
+    "githubRepository": "wordpress-git"
+  }
+}

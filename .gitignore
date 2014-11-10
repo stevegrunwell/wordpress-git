@@ -1,3 +1,6 @@
-# Keep these files out of the repository
-*.DS_Store
-*.sass-cache*
+node_modules
+bower_components
+dist
+*.log
+.sass-cache
+index.html

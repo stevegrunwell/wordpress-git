@@ -41,167 +41,18 @@
 
             <div class="slides">
 
-                
-                    
-                        
-    <section data-markdown="slides/index.md"></section>
-
-
-                    
-                    
-                
-                    
-                        
-    <section data-markdown="slides/who-am-i.md"></section>
-
-
-                    
-                    
-                
-                    
-                        
-    <section data-html="slides/git-resources.html"></section>
-
-
-                    
-                    
-                
-                    
-                        
-    <section data-markdown="slides/wtf-is-git.md"></section>
-
-
-                    
-                    
-                
-                    
-                        
-    <section data-html="slides/advantages-of-version-control.html"></section>
-
-
-                    
-                    
-                
-                    
-                        
-    <section data-markdown="slides/what-version-control-is-not.md"></section>
-
-
-                    
-                    
-                
-                    
-                        
-    <section data-markdown="slides/using-git-with-wordpress.md"></section>
-
-
-                    
-                    
-                
-                    
-                        
-    <section data-html="slides/goals-of-the-workflow.html"></section>
-
-
-                    
-                    
-                
-                    
-                        
-    <section data-markdown="slides/whats-included.md"></section>
-
-
-                    
-                    
-                
-                    
-                        
-    <section data-markdown="slides/new-environments-in-five-steps.md"></section>
-
-
-                    
-                    
-                
-                    
-                        
-    <section data-markdown="slides/the-gitignore-file.md"></section>
-
-
-                    
-                    
-                
-                    
-                        
-    <section data-html="slides/why-keep-out-so-much.html"></section>
-
-
-                    
-                    
-                
-                    
-                        
-    <section data-html="slides/reasons-to-keep-uploads-out-of-the-repo.html"></section>
-
-
-                    
-                    
-                
-                    
-                        
-    <section data-markdown="slides/behold-a-better-way.md"></section>
-
-
-                    
-                    
-                
-                    
-                        
-    <section data-html="slides/what-does-it-do.html"></section>
-
-
-                    
-                    
-                
-                    
-                        
-    <section data-markdown="slides/what-does-it-mean.md"></section>
-
-
-                    
-                    
-                
-                    
-                        
-    <section data-markdown="slides/dealing-with-wp-configphp.md"></section>
-
-
-                    
-                    
-                
-                    
-                        
-    <section data-html="slides/wp-configphp.html"></section>
-
-
-                    
-                    
-                
-                    
-                        
-    <section data-html="slides/put-it-all-together.html"></section>
-
-
-                    
-                    
-                
-                    
-                        
-    <section data-markdown="slides/questions.md"></section>
-
-
-                    
-                    
-                
+                <% _.forEach(slides, function(slide) { %>
+                    <% if (!_.isArray(slide)) { %>
+                        <%= section(slide) %>
+                    <% } %>
+                    <% if (_.isArray(slide)) { %>
+                        <section>
+                            <% _.forEach(slide, function(verticalslide) { %>
+                                <%= section(verticalslide) %>
+                            <% }); %>
+                        </section>
+                    <% } %>
+                <% }); %>
             </div>
 
         </div>
