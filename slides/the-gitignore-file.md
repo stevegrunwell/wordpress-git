@@ -2,7 +2,6 @@
 
 ```bash
 # Keep these files out of the repo
-/wp-content/plugins/hello.php
 /wp-content/themes/twenty*
 /wp-content/upgrade
 /wp-content/uploads

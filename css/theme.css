@@ -205,25 +205,25 @@ body {
   font-size: .5em;
   text-align: right; }
 
-.comparison-list {
+.comparison-list, .comparison-list p, .comparison-list li {
   text-align: center; }
-  .comparison-list h3 {
-    margin-bottom: 1.7em;
-    font-size: 1.1em;
-    text-transform: none;
-    font-weight: 300;
-    font-style: italic; }
-  .comparison-list ul {
-    margin: 0;
-    list-style: none; }
-  .comparison-list li {
-    float: left;
-    width: 50%;
-    padding: 0 6%; }
-    .comparison-list li + li {
-      border-left: 1px solid; }
-  .reveal .comparison-list {
-    margin-top: 2em; }
+.comparison-list h3 {
+  margin-bottom: 1.7em;
+  font-size: 1.1em;
+  text-transform: none;
+  font-weight: 300;
+  font-style: italic; }
+.comparison-list ul {
+  margin: 0;
+  list-style: none; }
+.comparison-list li {
+  float: left;
+  width: 50%;
+  padding: 0 6%; }
+  .comparison-list li + li {
+    border-left: 1px solid; }
+.reveal .comparison-list {
+  margin-top: 2em; }
 
 ::selection {
   color: white;
