@@ -1,4 +1,4 @@
-##  What version control is *not*
+###  What version control is *not*
 
 Version control is not meant to be a replacement for real, scheduled backups.
 

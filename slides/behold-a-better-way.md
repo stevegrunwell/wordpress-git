@@ -1,4 +1,4 @@
-##  Behold: A Better Way
+###  Behold: A Better Way
 
 ```apache
 <IfModule mod_rewrite.c>

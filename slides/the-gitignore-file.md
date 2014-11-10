@@ -1,4 +1,4 @@
-##  The .gitignore file
+###  The .gitignore file
 
 ```bash
 # Keep these files out of the repo

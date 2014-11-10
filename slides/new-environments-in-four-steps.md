@@ -1,4 +1,4 @@
-##  New environments in four easy steps:
+###  New environments in four easy steps:
 
 1. Clone repository
 2. Import database

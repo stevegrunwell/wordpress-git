@@ -1,4 +1,4 @@
-##  What's included?
+###  What's included?
 
 This strategy *includes* WordPress core and plugins in the repository.
 
